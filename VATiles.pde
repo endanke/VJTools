@@ -14,14 +14,12 @@ class VATiles extends VisualAction {
     super.display();
     noStroke();
     fill(255, 255, 255, 255*(1-progress));
-    rectMode(CENTER);
     float wstep = getWidth()/res;
     float hstep = getHeight()/res;
     for (int i = 0; i < res; ++i) {
       for (int j = 0; j < res; ++j) {
-        rect(wstep*i+wstep/2, hstep*j+hstep/2, wstep*progress, hstep*progress);
+        rect(wstep/2+wstep*i-wstep*progress/2, hstep/2+hstep*j-hstep*progress/2, wstep*progress, hstep*progress);
       }
     }
-    rectMode(CORNER);
   }
 }

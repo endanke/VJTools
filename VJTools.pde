@@ -1,15 +1,26 @@
 import java.util.*; 
-
+import ddf.minim.*;
+ 
+Minim minim;
+AudioInput in;
+ 
 ArrayList<VisualAction> actions;
 color backgroundColor = color(192, 64, 0);
 int timeCheck = 0;
 boolean randomEnabled = false;
+PImage leftHalf;
 
 void setup() {
   size(400, 400);
   if (frame != null) {
     frame.setResizable(true);
   }
+  
+  frameRate(30);
+
+  minim = new Minim(this);
+  in = minim.getLineIn();
+  in.enableMonitoring();
 
   actions = new ArrayList();
   actions.add(new VAZoom());
@@ -36,6 +47,23 @@ void draw() {
       timeCheck = millis();
     }
   }
+  
+  // Stuff for audio wave visualisation
+  /*
+  for(int i = 0; i < in.bufferSize() - 1; i++)
+  {
+    line( i, 50 + in.left.get(i)*50, i+1, 50 + in.left.get(i+1)*50 );
+    line( i, 150 + in.right.get(i)*50, i+1, 150 + in.right.get(i+1)*50 );
+  }
+  */
+  // Stuff for kaleidoscopic effects
+  /*
+  leftHalf = get(0, 0, width/2, height);
+  translate(width, 0);
+  scale(-1, 1);
+  image(leftHalf, 0, 0);
+  */
+  println("fps: " + frameRate);
 }
 
 void keyPressed() {
