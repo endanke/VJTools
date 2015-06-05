@@ -1,33 +1,73 @@
-float yoff = 0.0;        // 2nd dimension of perlin noise
+float yoff = 0.0;       
+int frameCheck = 0;
+
+PShape segments;
 
 void setup() {
-  size(640, 360);
+  size(1024, 768);
+  colorMode(HSB, 255);
+  
+  segments = createShape(GROUP);
+  segments.addChild(generateSegment(0));
+  segments.disableStyle();
 }
 
 void draw() {
-  background(51);
+  background(40);
+  fill(40);
+  strokeWeight(2);
+  
+  stroke(frameCount%255,255,150);
+  shape(segments);
+  segments.translate(0, -0.5);
 
-  fill(255);
-  // We are going to draw a polygon out of the wave points
-  beginShape(); 
-  
-  float xoff = 0;       // Option #1: 2D Noise
-  // float xoff = yoff; // Option #2: 1D Noise
-  
-  // Iterate over horizontal pixels
-  for (float x = 0; x <= width; x += 10) {
-    // Calculate a y value according to noise, map to 
-    float y = map(noise(xoff, yoff), 0, 1, 50,300); // Option #1: 2D Noise
-    // float y = map(noise(xoff), 0, 1, 200,300);    // Option #2: 1D Noise
-    
-    // Set the vertex
-    vertex(x, y); 
-    // Increment x dimension for noise
+  if (frameCount - frameCheck > 50) {
+    if (segments.getChildCount() > 50) {
+      segments.removeChild(0);
+    }
+    segments.addChild(generateSegment(segments.getChildCount()*20));
+    frameCheck = frameCount;
+  }
+}
+
+PShape generateSegment(float distance) {
+  PShape segment;
+  segment = createShape();
+  segment.beginShape(); 
+  segment.stroke(255);
+  segment.strokeWeight(2);
+  segment.fill(20);
+
+  float xoff = 0;      
+  float localYoff = yoff;
+  float peakCenter = width/2+random(width/2)-width/4;
+  for (float x = -10; x <= width+10; x += 10) {
+    if (random(10) > 9) {
+      localYoff += random(20) - random(20);
+    }
+    float noise = noise(xoff, localYoff);
+    if (x < peakCenter/2 || x > (peakCenter + peakCenter/2)) {
+      noise /= 5;
+    } else {
+      float midDist = abs(peakCenter-x)/peakCenter;
+      noise /= ((midDist+0.1)*5);
+    }
+    float y = map(noise, 1, 0, 200, 300); 
+
+    // Még egy kis random szögelés
+    /*
+    if(random(10) > 9){
+     y -= random(20);
+     }
+     */
+    segment.vertex(x, y); 
     xoff += 0.05;
   }
-  // increment y dimension for noise
-  yoff += 0.01;
-  vertex(width, height);
-  vertex(0, height);
-  endShape(CLOSE);
+  yoff += 0.01 + random(2);
+  segment.vertex(width, height*2);
+  segment.vertex(0, height*2);
+  segment.endShape(CLOSE);
+  segment.translate(0, height/2 + distance);
+  segment.disableStyle();
+  return segment;
 }
