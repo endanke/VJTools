@@ -15,7 +15,7 @@ class VAParticle extends VisualAction {
 
   void display() {
     super.display();
-    stroke(255, 255, 255, 255*(1-progress));
+    stroke(strokeColor, 255*(1-progress));
     p.render();
   }
 }

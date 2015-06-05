@@ -15,7 +15,7 @@ class VAWave extends VisualAction {
   void display() {
     super.display();
     noStroke();
-    fill(255, 255, 255, 255*(1-progress));
+    fill(fillColor, 255*(1-progress));
     beginShape(); 
 
     float xoff = initialX; 

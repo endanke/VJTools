@@ -19,6 +19,7 @@ class VAZoom extends VisualAction {
       noFill();
     } else {
       noStroke();
+      fill(fillColor, 255*(1-progress));
     }
     rectMode(CENTER);
     rect(getWidth()/2, getHeight()/2, getWidth()*progress, getHeight()*progress);

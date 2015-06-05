@@ -21,7 +21,7 @@ class VACircles extends VisualAction {
   void display() {
     super.display();
     noStroke();    
-    fill(255, 255, 255, 255*(1-progress));
+    fill(fillColor, 255*(1-progress));
     for (CircleData data : circles) {
       ellipse(data.x, data.y, data.size, data.size);
       //ellipse(data.x, data.y, data.size*in.left.level()*5, data.size*in.left.level()*5);

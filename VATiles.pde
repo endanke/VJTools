@@ -13,7 +13,7 @@ class VATiles extends VisualAction {
   void display() {
     super.display();
     noStroke();
-    fill(255, 255, 255, 255*(1-progress));
+    fill(fillColor, 255*(1-progress));
     float wstep = getWidth()/res;
     float hstep = getHeight()/res;
     for (int i = 0; i < res; ++i) {

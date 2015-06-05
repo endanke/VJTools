@@ -6,17 +6,21 @@ AudioInput in;
  
 ArrayList<VisualAction> actions;
 color backgroundColor = color(192, 64, 0);
+color fillColor       = color(255);
+color strokeColor     = fillColor;
+
 int timeCheck = 0;
 boolean randomEnabled = false;
 PImage leftHalf;
 
 void setup() {
-  size(400, 400);
+  size(500,500,P2D);
   if (frame != null) {
     frame.setResizable(true);
   }
   
   frameRate(30);
+  colorMode(HSB, 255);
 
   minim = new Minim(this);
   in = minim.getLineIn();
@@ -28,11 +32,15 @@ void setup() {
 
 void draw() {
   background(backgroundColor);
-
+// Simulated motion blur
+/*
+  fill(backgroundColor,10);
+  rect(0,0,width,height);
+*/
   for (int i = actions.size () - 1; i >= 0; i--) {
     VisualAction va = actions.get(i);
-    fill(255, 255, 255, 100);
-    stroke(255);
+    fill(fillColor);
+    stroke(strokeColor);
     va.step();
     va.display();
     if (va.finished) {
@@ -41,8 +49,7 @@ void draw() {
   }
 
   if (randomEnabled) {
-    if (millis() - timeCheck > 100) {
-      println("ok");
+    if (millis() - timeCheck > random(300)+200) {
       doActionWithIndex(int(random(7)));
       timeCheck = millis();
     }
@@ -56,6 +63,9 @@ void draw() {
     line( i, 150 + in.right.get(i)*50, i+1, 150 + in.right.get(i+1)*50 );
   }
   */
+  
+  
+  
   // Stuff for kaleidoscopic effects
   /*
   leftHalf = get(0, 0, width/2, height);
@@ -63,6 +73,7 @@ void draw() {
   scale(-1, 1);
   image(leftHalf, 0, 0);
   */
+  
   println("fps: " + frameRate);
 }
 
@@ -98,6 +109,8 @@ void doActionWithIndex(int index) {
   switch(index) {
   case 0:
     backgroundColor = color(random(255), random(255), random(255));
+    fillColor = color(hue(backgroundColor), saturation(backgroundColor) + 50, 255-brightness(backgroundColor));
+    strokeColor = fillColor;
     break;
   case 1:
     actions.add(new VALine());
